@@ -1,0 +1,86 @@
+# Each CNC application is configured via the .pan-cnc.yaml file. This file will load all the views defined in views.py
+# and configure the URL routing for each. To completely build a CNC app, you must configure this file along with
+# your code in views.py
+
+# name is used to identify this application inside the CNC framework - This name must match the actual directory
+# name that this app is located in under the 'src' directory.
+name: dag_app
+
+# This bit will load these repositories on app start up. This is useful to add your own Skillets from another repo
+# and reference them below
+#repositories:
+#  - name: Iron-Skillet 9.0
+#    url: https://github.com/PaloAltoNetworks/iron-skillet.git
+#    branch: panos_v9.0
+#    destination_directory: ironskillet
+#  - name: Iron-Skillet 8.0
+#    url: https://github.com/PaloAltoNetworks/iron-skillet.git
+#    branch: panos_v8.0
+#    destination_directory: ironskillet8
+
+# views is a list of dicts that will configure URL routing within the application. Each view may also optionally
+# have a menu entry configured using the 'menu' and 'menu_option' attributes
+views:
+
+  # Each app should contain the '' default route. name here corresponds to the url path that will route the request
+  # to the class based view defined in the 'class' attribute. The class can be any Django 2.0+ class based view
+  # but for convenience you should base one of the provided CNC base classes like CNCView, CNCBaseFormView, or
+  # ProvisionSnippetView
+  - name: ''
+    class: CNCView  # this corresponds to a CNC base class defined in pan_cnc/views.py or one of your own in views.py
+    menu: DAG  # this top level menu entry
+    menu_option: Welcome # the clickable item in the top level menu entry
+    attributes:     # attributes defined here will set class level attributes in the class defined above.
+      template_name: pan_cnc/welcome.html  # this sets the template_name class level attribute
+    context:    # context will set these attributes in the context dict that is sent to the HTML template for rendering
+      title: Profile Selection
+      description: |
+        This application allows the user to choose in which Dynamic Address Group they would like to participate. This
+        application will contact Panorama, pull the list of configured DAGs and allow the user to choose one. Once
+        chosen, the user's IP address is added to that DAG for a configurable amount of time.
+      documentation_link: https://github.com/scotchoaf/cnc-skeleton/blob/master/src/cnc-app-name/.pan-cnc.yaml
+      next: get_dags  # next adds a link to the 'get started' button
+#
+#  - name: workflow00
+#    class: ExampleAppView # this is a view defined in cnc-app-name/views.py which bases CNCBaseFormView
+#    menu: Example
+#    menu_option: Test Menu Option
+#    attributes:
+#      header: Step 1      # Header to render in the HTML template
+#      title: Select Configuration Option  # title to render in the HTML template
+#      snippet: simple_example  # this is the name of a skillet to load. CNCBaseFormView will use this to render a form
+#      fields_to_render:   # logic in CNCBaseFormView will only show variables defined in the snippet if they match this
+#        - var_name        # list. In this case, we only want to show the user these two fields out of the three defined
+#        - var_name_again
+#      next_url: workflow01    # after the user submits the form, where should we send them? This matches the 'name'
+#                              # of another view
+#
+#  - name: workflow01      # another view. Note this one does not have a menu entry or menu item defined
+#    class: ExampleAppPasswordView   # another class defined in cnc-app-name/views.py
+#    attributes:           # class level attributes to override and set
+#      snippet: simple_example     # again, load this snippet for use to show to the user
+#      fields_to_render:           # again, only show this one single field out of the 3 defined in this snippet
+#        - example_password
+#
+#  # if you do not require any special logic after the form has been submitted, you can provide a list of
+#  # skillets and their corresponding menu entries like so and use the base ProvisionSnippetView
+#  - name: is_set_cmd
+#    class: ProvisionSnippetView # this is a CNC base class that handles all the Skillet related logic
+#    menu: Iron-Skillet      # this is a menu entry that will be added to the top navigation bar
+#    menu_option: Set Commands for 9.0 # this is the sub-menu entry for this skillet
+#    attributes:
+#      snippet: skillet_set_command_panos_v90 # this is the name of a skillet to load.
+#
+  - name: get_dags
+    class: DAGProvisionView
+    menu: DAG
+    menu_option: List Dynamic Address Groups
+    attributes:
+      snippet: get_dags
+
+#  - name: is_full_cmd
+#    class: ProvisionSnippetView
+#    menu: Iron-Skillet
+#    menu_option: Full XML for 9.0
+#    attributes:
+#      snippet: skillet_full_panos_v90
