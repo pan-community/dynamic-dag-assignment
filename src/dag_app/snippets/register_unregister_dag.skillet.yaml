@@ -1,0 +1,46 @@
+name: panorama_register_unregister_dag_user
+label: Register or unregister user to or from a DAG
+description: |
+  Based on user selection register or unregister the user from the DAG
+type: rest
+labels:
+  collection:
+    - lib
+variables:
+  - name: TARGET_IP
+    description: Host IP
+    default: 192.0.2.1
+    type_hint: hidden
+  - name: api_key
+    description: API Key
+    default:
+    type_hint: hidden
+  - name: dag_project_filter
+    description: Select project to work on
+    default: ''
+    type_hint: dropdown
+    source: dag_names_list
+  - name: dag_ip_address
+    description: ip address used for DAG register or unregister
+    default: ''
+    type_hint: ip_addr
+  - name: project_dag_timeout
+    description: select timeout period for access to project (minutes)
+    default: 3600
+    type_hint: integer
+  - name: dag_unregister
+    description: select to unregister from the project
+    default: []
+    type_hint: checkbox
+    cbx_list:
+      - key: unregister
+        value: unregister
+
+snippets:
+  - name: register_user_to_dag
+    when: "'unregister' not in dag_unregister"
+    path: |-
+      https://{{ TARGET_IP }}/api/?type=user-id&vsys=vsys1&
+      cmd=<uid-message><type>update</type><payload><register><entry ip="{{ dag_ip_address }}"><tag>
+      <member timeout="{{ project_dag_timeout }}">{{ dag_project_filter }}</member></tag></entry></register>
+      </payload></uid-message>&key={{ api_key }}
