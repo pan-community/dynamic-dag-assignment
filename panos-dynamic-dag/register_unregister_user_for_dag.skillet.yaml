@@ -24,12 +24,12 @@ variables:
     type_hint: hidden
   - name: dag_project_filter
     description: Select project to work on
-    default: 'pepsi'
+    default: pepsi
     type_hint: dropdown
     source: dag_names_list
   - name: dag_ip_address
     description: ip address used for DAG register or unregister
-    default: '1.1.1.1'
+    default: 1.1.1.1
     type_hint: ip_addr
   - name: project_dag_timeout
     description: select timeout period for access to project (minutes)
