@@ -1,0 +1,82 @@
+name: panorama_register_unregister_dag_user
+label: Register or unregister user to or from a DAG
+
+description: |
+  Based on user selection register or unregister the user from the DAG
+type: rest
+
+labels:
+  collection:
+    - lib
+
+variables:
+  - name: TARGET_IP
+    description: Host IP
+    default: 10.70.221.159
+    type_hint: hidden
+  - name: TARGET_USERNAME
+    description: Username
+    default: admin
+    type_hint: hidden
+  - name: TARGET_PASSWORD
+    description: Password
+    default: Paloalto1
+    type_hint: hidden
+  - name: dag_project_filter
+    description: Select project to work on
+    default: pepsi
+    #type_hint: dropdown
+    #source: dag_names_list
+  - name: dag_ip_address
+    description: ip address used for DAG register or unregister
+    default: 1.1.1.1
+    type_hint: text
+  - name: project_dag_timeout
+    description: select timeout period for access to project (minutes)
+    default: 3600
+    type_hint: integer
+  - name: dag_unregister
+    description: select to unregister from the project
+    default: []
+    type_hint: checkbox
+    cbx_list:
+      - key: unregister
+        value: unregister
+
+
+snippets:
+  # generate API key using device credentials
+  - name: key_gen
+    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    output_type: xml
+    outputs:
+      - name: api_key
+        capture_pattern: result/key
+
+  # register ip address to dag
+  # TODO capture output info and display on screen
+  - name: register_user_to_dag
+    when: "'unregister' not in dag_unregister"
+    path: |-
+      https://{{ TARGET_IP }}/api/?type=user-id&vsys=vsys1&
+      cmd=<uid-message><type>update</type><payload><register><entry ip="{{ dag_ip_address }}"><tag>
+      <member timeout="{{ project_dag_timeout }}">{{ dag_project_filter }}</member></tag></entry></register>
+      </payload></uid-message>&key={{ api_key }}
+    output_type: xml
+    outputs:
+      - name: register_response
+        capture_object: .
+
+  # unregister ip address from dag
+  # TODO capture output info and display on screen
+  - name: unregister_user_from_dag
+    when: "'unregister' in dag_unregister"
+    path: |-
+      https://{{ TARGET_IP }}/api/?type=user-id&vsys=vsys1&
+      cmd=<uid-message><type>update</type><payload><unregister><entry ip="{{ dag_ip_address }}"><tag>
+      <member>{{ dag_project_filter }}</member></tag></entry></unregister>
+      </payload></uid-message>&key={{ api_key }}
+    output_type: xml
+    outputs:
+      - name: unregister_response
+        capture_object: .
