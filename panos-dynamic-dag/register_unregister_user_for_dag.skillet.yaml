@@ -30,14 +30,14 @@ variables:
   - name: dag_ip_address
     description: ip address used for DAG register or unregister
     default: 1.1.1.1
-    type_hint: ip_addr
+    type_hint: text
   - name: project_dag_timeout
     description: select timeout period for access to project (minutes)
     default: 3600
     type_hint: integer
   - name: dag_unregister
     description: select to unregister from the project
-    default: ['unregister']
+    default: []
     type_hint: checkbox
     cbx_list:
       - key: unregister
