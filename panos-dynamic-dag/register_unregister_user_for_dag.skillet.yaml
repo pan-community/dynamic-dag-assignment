@@ -25,9 +25,8 @@ variables:
   - name: dag_project_filter
     description: Select project to work on
     default: pepsi
-    type_hint: text
-    #type_hint: dropdown
-    #source: dag_names_list
+    type_hint: dropdown
+    source: dag_names_list
   - name: dag_ip_address
     description: ip address used for DAG register or unregister
     default: 1.1.1.1
