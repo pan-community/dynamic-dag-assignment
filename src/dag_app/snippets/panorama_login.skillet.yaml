@@ -1,0 +1,42 @@
+name: panorama_login
+label: Login to Panorama
+
+description: |
+  Authenticate to Panorama
+type: rest
+labels:
+  collection:
+    - lib
+  output_template: login_output.j2
+
+variables:
+  - name: TARGET_IP
+    description: Host IP
+    default: 192.0.2.1
+    type_hint: hidden
+  - name: TARGET_USERNAME
+    description: Username
+    default: admin
+    type_hint: hidden
+  - name: TARGET_PASSWORD
+    description: Password
+    default: admin
+    type_hint: hidden
+
+snippets:
+  - name: key_gen
+    path: https://{{ TARGET_IP }}/api/?type=keygen&user={{ TARGET_USERNAME }}&password={{ TARGET_PASSWORD }}
+    output_type: xml
+    outputs:
+      - name: api_key
+        capture_pattern: result/key
+  - name: get_dags
+    path: |
+      https://{{ TARGET_IP }}/api/?type=op&cmd=<show><object><dynamic-address-group><all></all>
+      </dynamic-address-group></object></show>&key={{ api_key }}
+    output_type: xml
+    outputs:
+      - name: dag_names_list
+        capture_list: ./result/device-groups/entry[@name='Mobile_User_Device_Group']/address-group/filter/text()
+      - name: full_object
+        capture_object: .

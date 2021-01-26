@@ -90,17 +90,26 @@ class DAGProvisionView(ProvisionSnippetView):
         :return:
         """
 
-        application_skillets_dir = Path(os.path.join(settings.SRC_PATH, self.app_dir, 'snippets'))
-        skillet_loader = SkilletLoader()
-        app_skillets = skillet_loader.load_all_skillets_from_dir(application_skillets_dir)
-        all_skillet_dicts = list()
-        for s in app_skillets:
-            all_skillet_dicts.append(s.skillet_dict)
+        all_skillets = cnc_utils.get_long_term_cached_value(self.app_dir, 'all_snippets')
+        if not all_skillets:
+            all_skillets = list()
+            application_skillets_dir = Path(os.path.join(settings.SRC_PATH, self.app_dir, 'snippets'))
+            skillet_loader = SkilletLoader()
+            app_skillets = skillet_loader.load_all_skillets_from_dir(application_skillets_dir)
+            for s in app_skillets:
+                all_skillets.append(s.skillet_dict)
 
-        cnc_utils.set_long_term_cached_value(self.app_dir, 'all_snippets', all_skillet_dicts, -1)
+            cnc_utils.set_long_term_cached_value(self.app_dir, 'all_snippets', all_skillets, -1)
 
-        for skillet in app_skillets:
-            if skillet.name == skillet_name:
-                return skillet.skillet_dict
+        for skillet in all_skillets:
+            if skillet['name'] == skillet_name:
+                return skillet
 
         return None
+
+    def get_context_data(self, **kwargs):
+
+        user_ip = self.request.META.get('REMOTE_ADDR')
+        self.save_value_to_workflow('dag_ip_address', user_ip)
+
+        return super().get_context_data(**kwargs)
