@@ -25,6 +25,7 @@ variables:
   - name: dag_project_filter
     description: Select project to work on
     default: pepsi
+    type_hint: text
     #type_hint: dropdown
     #source: dag_names_list
   - name: dag_ip_address
@@ -34,7 +35,7 @@ variables:
   - name: project_dag_timeout
     description: select timeout period for access to project (minutes)
     default: 3600
-    type_hint: integer
+    type_hint: text
   - name: dag_unregister
     description: select to unregister from the project
     default: []
