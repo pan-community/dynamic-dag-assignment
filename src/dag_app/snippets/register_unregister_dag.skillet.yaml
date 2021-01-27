@@ -6,6 +6,8 @@ type: rest
 labels:
   collection:
     - lib
+  output_template: register_output.j2
+
 variables:
   - name: TARGET_IP
     description: Host IP
@@ -37,10 +39,30 @@ variables:
         value: unregister
 
 snippets:
+  # register ip address to dag
+  # TODO capture output info and display on screen
   - name: register_user_to_dag
     when: "'unregister' not in dag_unregister"
     path: |-
       https://{{ TARGET_IP }}/api/?type=user-id&vsys=vsys1&
       cmd=<uid-message><type>update</type><payload><register><entry ip="{{ dag_ip_address }}"><tag>
-      <member timeout="{{ project_dag_timeout }}">{{ dag_project_filter }}</member></tag></entry></register>
+      <member timeout="{{ project_dag_timeout }}">{{ dag_project_filter | replace("'", "") }}</member></tag></entry>
+      </register></payload></uid-message>&key={{ api_key }}
+    output_type: xml
+    outputs:
+      - name: register_response
+        capture_object: .
+
+  # unregister ip address from dag
+  # TODO capture output info and display on screen
+  - name: unregister_user_from_dag
+    when: "'unregister' in dag_unregister"
+    path: |-
+      https://{{ TARGET_IP }}/api/?type=user-id&vsys=vsys1&
+      cmd=<uid-message><type>update</type><payload><unregister><entry ip="{{ dag_ip_address }}"><tag>
+      <member>{{ dag_project_filter | replace("'", "") }}</member></tag></entry></unregister>
       </payload></uid-message>&key={{ api_key }}
+    output_type: xml
+    outputs:
+      - name: unregister_response
+        capture_object: .

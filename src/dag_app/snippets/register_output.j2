@@ -1,0 +1,13 @@
+<div>
+{% if 'unregister' in context['dag_unregister'] %}
+
+Unregister Results are
+<pre class="json">{{ context['unregister_response'] | tojson(4) | e }}</pre>
+
+{% else %}
+
+Register Results are
+<pre class="json">{{ context['register_response'] | tojson(4) | e }}</pre>
+
+{% endif %}
+</div>

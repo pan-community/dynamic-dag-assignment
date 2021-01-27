@@ -44,7 +44,7 @@ views:
   - name: get_dags
     class: DAGProvisionView
     menu: DAG
-    menu_option: List Dynamic Address Groups
+    menu_option: Manage Remote Access Groups
     attributes:
       snippet: panorama_login_workflow
 
