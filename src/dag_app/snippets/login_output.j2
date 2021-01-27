@@ -2,7 +2,12 @@ Successfully Authenticated to Panorama at {{ context['TARGET_IP'] }}.
 
 The following mappings are currently configured:
 ---
-{%- for i in (registered_ips["response"]["result"]["entry"] | list) %}
+{%- if registered_ips["response"]["result"]["entry"] is mapping %}
+    {%- set entries = [registered_ips["response"]["result"]["entry"]] %}
+{%- else %}
+    {%- set entries = registered_ips["response"]["result"]["entry"] | list %}
+{%- endif %}
+{%- for i in entries %}
     IP Address:  {{ i["@ip"] }}
     {%- if i["tag"]["member"] is string %}
         Member: {{ i["tag"]["member"] }}
