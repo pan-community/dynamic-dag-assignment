@@ -1,5 +1,5 @@
 {%- if 'unregister' in context['dag_unregister'] %}
-    {%- set results = (context['unregister_response'])["response"]["result"]["@status"] %}
+    {%- set results = (context['unregister_response'])["response"]["@status"] %}
     {%- if results == "success" %}
 Unregister Results were Successful
     {%- else %}
@@ -8,7 +8,7 @@ Unregister Results were Successful
 
     {%- endif %}
 {%- else %}
-    {%- set results = (context['register_response'])["response"]["result"]["@status"] %}
+    {%- set results = (context['register_response'])["response"]["@status"] %}
 
     {%- if results == "success" %}
 Register Results were Successful
