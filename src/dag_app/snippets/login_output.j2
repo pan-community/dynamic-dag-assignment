@@ -1,5 +1,13 @@
 <div>
-    <h5>
         Successfully Authenticated to Panorama at {{ context['TARGET_IP'] }}.
-    </h5>
+
+        The following mappings are currently configured:
+
+        {% for i in (registered_ips["response"]["result"]["entry"] | list) %}
+            IP Address:  {{ i["@ip"] }}
+            {% for m in (i["tag"]["member"] | list) %}
+                Member: {{ m }}
+            {% endfor %}
+
+        {% endfor %}
 </div>
