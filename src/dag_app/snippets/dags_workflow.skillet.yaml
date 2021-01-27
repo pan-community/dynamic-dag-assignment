@@ -2,11 +2,12 @@ name: panorama_login_workflow
 label: Register or Unregister to Panorama
 
 description: |
-  Adds a users IP address to
+  This workflow steps through the elements to provide a user dropdown DAG list
+    and assign a user into the DAG based on their IP address
 type: workflow
 labels:
   collection:
-    - lib
+    - DAG
 variables:
   - name: TARGET_IP
     description: Host IP

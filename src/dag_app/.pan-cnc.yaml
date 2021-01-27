@@ -27,7 +27,7 @@ views:
   # but for convenience you should base one of the provided CNC base classes like CNCView, CNCBaseFormView, or
   # ProvisionSnippetView
   - name: ''
-    class: CNCView  # this corresponds to a CNC base class defined in pan_cnc/views.py or one of your own in views.py
+    class: AppWelcomeView  # this corresponds to a CNC base class defined in pan_cnc/views.py or one of your own in views.py
     menu: DAG  # this top level menu entry
     menu_option: Welcome # the clickable item in the top level menu entry
     attributes:     # attributes defined here will set class level attributes in the class defined above.

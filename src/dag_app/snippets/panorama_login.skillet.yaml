@@ -2,7 +2,7 @@ name: panorama_login
 label: Login to Panorama
 
 description: |
-  Authenticate to Panorama
+  Authenticate to Panorama and get a list of DAGs
 type: rest
 labels:
   collection:

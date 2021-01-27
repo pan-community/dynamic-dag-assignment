@@ -8,44 +8,19 @@ assign IP dynamically to dag configured in panorama
 
 ```bash
 
-cd cnc
-pip install -r requirements.txt
+docker run -e 'REPO=https://gitlab.com/panw-gse/as/dynamic-dag-assignment.git' -p 8082:8080 --rm -t nembery/appetizer:dev
 
 ```
 
-You should now have two top level directories: `src` and `cnc`. 
 
-## Running Pan-CNC
-
-#### 1. Build the database
+The default username and password are `paloalto` and `appetizer`. These may be changed by
+setting the following Environment variables before launch:
 
 ```bash
 
-./cnc/manage.py migrate
+export CNC_USERNAME=dag
+export CNC_PASSWORD=dag
 
 ```
 
-#### 2. Create a new user
 
-NOTE: In the below command, change ***email address*** and ***passwd*** to your respective entries .Common practice 
-is to have the password be the name of the app, unless specifically spelled out in your documentation.
-
-```bash
-
-./cnc/manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('dag', 'admin@example.com', 'dag')"
-
-```
-
-#### Local Development
-
-You can launch this new app with the following commands:
-
-```bash
-cd cnc
-celery -A pan_cnc worker --loglevel=info  & 
-./manage.py runserver 8080
-
-```
-
-This will start a background task worker and then start the application on port `8080`. You can login using the 
-`username` and `password` specified above. 
