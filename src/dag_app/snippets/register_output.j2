@@ -1,13 +1,17 @@
-<div>
-{% if 'unregister' in context['dag_unregister'] %}
+{%- set results = (context['unregister_response'] | to_json )["response"]["result"]["@status"] %}
+{%- if 'unregister' in context['dag_unregister'] %}
+{%- if results == "success" %}
+Unregister Results were Successful
+{%- else %}
 
-Unregister Results are
-<pre class="json">{{ context['unregister_response'] | tojson(4) | e }}</pre>
+{{ context['unregister_response'] | tojson(4) }}
 
-{% else %}
+{%- else %}
 
-Register Results are
-<pre class="json">{{ context['register_response'] | tojson(4) | e }}</pre>
+{%- if results == "success" %}
+Register Results were Successful
+{%- else %}
 
-{% endif %}
-</div>
+{{ context['register_response'] | tojson(4) }}
+
+{%- endif %}
