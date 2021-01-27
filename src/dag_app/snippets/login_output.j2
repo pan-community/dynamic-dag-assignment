@@ -7,9 +7,9 @@ The following mappings are currently configured:
     {%- if i["tag"]["member"] is string %}
         Member: {{ i["tag"]["member"] }}
     {%- else %}
-        {% for m in (i["tag"]["member"] | list) %}
+        {%- for m in (i["tag"]["member"] | list) %}
         Member: {{ m }}
-        {% endfor %}
+        {%- endfor %}
     {%- endif %}
 ---
 {% endfor %}
