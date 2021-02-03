@@ -8,7 +8,7 @@ assign IP dynamically to dag configured in panorama
 
 ```bash
 
-docker run -e 'REPO=https://gitlab.com/panw-gse/as/dynamic-dag-assignment.git' -p 8083:8080 --rm -t registry.gitlab.com/panw-gse/as/appetizer:latest
+docker run -e 'REPO=https://gitlab.com/panw-gse/as/dynamic-dag-assignment.git' -p 8083:8080 --rm -it registry.gitlab.com/panw-gse/as/appetizer:latest
 ```
 
 
