@@ -8,8 +8,7 @@ assign IP dynamically to dag configured in panorama
 
 ```bash
 
-docker run -e 'REPO=https://gitlab.com/panw-gse/as/dynamic-dag-assignment.git' -p 8082:8080 --rm -t nembery/appetizer:dev
-
+docker run -e 'REPO=https://gitlab.com/panw-gse/as/dynamic-dag-assignment.git' -p 8083:8080 --rm -t registry.gitlab.com/panw-gse/as/appetizer:latest
 ```
 
 
@@ -23,4 +22,7 @@ export CNC_PASSWORD=dag
 
 ```
 
+In this example, browse to localhost:8083 in a web browser to launch this app. You may
+change the default port mapping to something other than 8083 by modifying the docker 
+run command above. 
 

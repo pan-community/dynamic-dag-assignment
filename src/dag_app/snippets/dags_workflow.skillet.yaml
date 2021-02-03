@@ -3,22 +3,24 @@ label: Register or Unregister to Panorama
 
 description: |
   This workflow steps through the elements to provide a user dropdown DAG list
-    and assign a user into the DAG based on their IP address
+    and assign a user into the DAG based on their IP address. In this example App, it is first
+    required to authenticate to Panorama. This will fetch the list of available DAGs and allow
+    the user to choose which one they would like to be assigned.
 type: workflow
 labels:
   collection:
     - DAG
 variables:
   - name: TARGET_IP
-    description: Host IP
+    description: Panorama IP
     default: 192.0.2.1
     type_hint: ip_address
   - name: TARGET_USERNAME
-    description: Username
+    description: Panorama Username
     default: admin
     type_hint: text
   - name: TARGET_PASSWORD
-    description: Password
+    description: Panorama Password
     default: admin
     type_hint: password
 
